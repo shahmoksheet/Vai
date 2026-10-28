@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<!-- © 2026 Moksheet Shah. All rights reserved. Shared for viewing only — no copying, modification or redistribution without written permission. See LICENSE. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vasy AI Agent for VasyERP</title>
+<meta name="description" content="Free Chrome extension for VasyERP: type what you need in plain English or Hinglish and Vasy fills the screens for you. No API key, no subscription, runs in your browser.">
+<meta property="og:title" content="Vasy AI Agent — type it, Vasy does the clicking">
+<meta property="og:description" content="Free AI agent for VasyERP. No API key, no credits, no subscription.">
+<meta property="og:image" content="media/images/Poster-16x9-reveal.jpg">
+<link rel="icon" href="extension/icons/icon32.png">
+<style>
+  :root {
+    --bg: #0b0a1c; --bg2: #15102e; --card: rgba(255,255,255,.06); --line: rgba(255,255,255,.12);
+    --text: #f4f2ff; --soft: #c9c4e6; --mute: #9a94bf;
+    --red: #E23B4E; --violet: #6B4CF6; --amber: #FFAE33;
+    --grad: linear-gradient(135deg, #E23B4E 0%, #6B4CF6 100%);
+    --hi: linear-gradient(90deg, #ff8f7d, #ffd27a 50%, #b8a0ff);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; color: var(--text); background: var(--bg);
+    font: 16px/1.6 "Segoe UI Variable Display", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+    background-image: radial-gradient(60rem 40rem at 10% -10%, rgba(107,76,246,.35), transparent 60%),
+                      radial-gradient(50rem 36rem at 100% 30%, rgba(226,59,78,.22), transparent 60%);
+    background-attachment: fixed;
+  }
+  a { color: inherit; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+  header.top { display: flex; align-items: center; justify-content: space-between; padding: 22px 0; }
+  .brand { display: flex; align-items: center; gap: 12px; font-weight: 750; font-size: 19px; text-decoration: none; }
+  .brand img { width: 38px; height: 38px; border-radius: 10px; }
+  .nav a { color: var(--soft); text-decoration: none; margin-left: 22px; font-weight: 600; font-size: 15px; }
+  .nav a:hover { color: var(--text); }
+  .hero { text-align: center; padding: 40px 0 28px; }
+  .eyebrow { display: inline-block; font-size: 13px; letter-spacing: .18em; text-transform: uppercase; color: var(--amber); font-weight: 700; }
+  h1 { font-size: clamp(36px, 6vw, 68px); line-height: 1.05; margin: 14px 0 16px; letter-spacing: -.02em; }
+  .hl { background: var(--hi); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .lead { font-size: clamp(17px, 2vw, 20px); color: var(--soft); max-width: 720px; margin: 0 auto 26px; }
+  .cta { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 24px; border-radius: 999px; font-weight: 750; text-decoration: none; font-size: 16px; }
+  .btn.primary { background: var(--grad); box-shadow: 0 10px 40px rgba(226,59,78,.35); }
+  .btn.ghost { border: 1.5px solid var(--line); background: var(--card); }
+  .btn:hover { transform: translateY(-1px); }
+  .pills { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: 22px 0 0; padding: 0; list-style: none; }
+  .pills li { padding: 7px 14px; border-radius: 999px; background: var(--card); border: 1px solid var(--line); font-size: 14px; color: var(--soft); font-weight: 600; }
+  .film { margin: 38px auto 10px; border-radius: 20px; overflow: hidden; border: 1px solid var(--line); box-shadow: 0 30px 80px rgba(0,0,0,.55); background: #000; }
+  .film video { display: block; width: 100%; height: auto; }
+  .note { text-align: center; color: var(--mute); font-size: 13.5px; margin: 10px 0 0; }
+  section { padding: 56px 0 8px; }
+  h2 { font-size: clamp(26px, 3.4vw, 38px); margin: 0 0 10px; letter-spacing: -.01em; }
+  .sub { color: var(--soft); margin: 0 0 28px; max-width: 680px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 22px; }
+  .card h3 { margin: 4px 0 6px; font-size: 18px; }
+  .card p { margin: 0; color: var(--soft); font-size: 15px; }
+  .ico { font-size: 26px; }
+  .cmd { display: block; font: 600 14px/1.45 Consolas, "Cascadia Mono", monospace; background: rgba(0,0,0,.35); border: 1px solid var(--line);
+         border-radius: 10px; padding: 9px 12px; margin: 12px 0 8px; color: #ffe2b0; overflow-wrap: anywhere; }
+  .split { display: grid; grid-template-columns: 1.2fr .8fr; gap: 28px; align-items: center; }
+  .phone { max-width: 320px; margin: 0 auto; border-radius: 28px; overflow: hidden; border: 1px solid var(--line); box-shadow: 0 24px 60px rgba(0,0,0,.5); background: #000; }
+  .phone video { display: block; width: 100%; height: auto; }
+  ul.ticks { list-style: none; padding: 0; margin: 0; }
+  ul.ticks li { padding: 8px 0 8px 32px; position: relative; color: var(--soft); }
+  ul.ticks li::before { content: "✓"; position: absolute; left: 0; top: 7px; width: 22px; height: 22px; border-radius: 50%; background: var(--grad); color: #fff; font-size: 13px; font-weight: 800; display: grid; place-items: center; }
+  ol.steps { counter-reset: s; list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+  ol.steps li { counter-increment: s; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px 16px 62px; position: relative; color: var(--soft); }
+  ol.steps li::before { content: counter(s); position: absolute; left: 16px; top: 14px; width: 32px; height: 32px; border-radius: 10px; background: var(--grad); color: #fff; font-weight: 800; display: grid; place-items: center; }
+  ol.steps b, ul.ticks b { color: var(--text); }
+  code { font-family: Consolas, "Cascadia Mono", monospace; background: rgba(255,255,255,.08); padding: 1px 6px; border-radius: 6px; font-size: .92em; }
+  .value { text-align: center; padding: 60px 0 20px; }
+  .zero { font-size: clamp(80px, 14vw, 160px); font-weight: 800; line-height: 1; margin: 0; }
+  footer { border-top: 1px solid var(--line); margin-top: 60px; padding: 28px 0 40px; color: var(--mute); font-size: 14px; }
+  footer .row { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  @media (max-width: 760px) {
+    .nav { display: none; }
+    .split { grid-template-columns: 1fr; }
+    .hero { padding-top: 20px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="#"><img src="extension/icons/icon128.png" alt="">Vasy AI Agent</a>
+    <nav class="nav"><a href="#features">Features</a><a href="#install">Install</a><a href="#privacy">Privacy</a><a href="release/Vasy-AI-Agent-v17.3.0.zip" download>Download</a></nav>
+  </header>
+
+  <div class="hero">
+    <span class="eyebrow">Free AI agent for VasyERP</span>
+    <h1>Type it. Vasy does the <span class="hl">clicking.</span></h1>
+    <p class="lead">Tell it what you need in plain English or Hinglish. Vasy fills the real VasyERP screens for you, answers questions from your books, and waits for your yes before it moves any money.</p>
+    <div class="cta">
+      <a class="btn primary" href="release/Vasy-AI-Agent-v17.3.0.zip" download>⬇ Download v17.3.0 — free</a>
+      <a class="btn ghost" href="#install">How to install</a>
+    </div>
+    <ul class="pills"><li>No API key</li><li>No credits</li><li>No subscription</li><li>Runs in your browser</li><li>All 77 modules</li></ul>
+    <div class="film">
+      <video controls playsinline preload="metadata" poster="media/images/Poster-16x9-reveal.jpg">
+        <source src="media/video/Vasy-AI-Agent-Ad-16x9.mp4" type="video/mp4">
+      </video>
+    </div>
+    <p class="note">Real footage of the agent on a VasyERP test account · ⏩ marks sped-up moments</p>
+  </div>
+
+  <section id="features">
+    <h2>One sentence instead of <span class="hl">twelve clicks</span></h2>
+    <p class="sub">The work you repeat every day, done for you on the real VasyERP screen.</p>
+    <div class="grid">
+      <div class="card"><div class="ico">🧾</div><h3>Purchase orders</h3><p>Supplier, item, quantity and rate, filled and saved.</p><span class="cmd">create purchase order for Sharma Textiles 2 Notebook1 at 400</span></div>
+      <div class="card"><div class="ico">📊</div><h3>Live answers</h3><p>Today's sales, stock and business health, read off your books.</p><span class="cmd">aaj ka sale kitna hua</span></div>
+      <div class="card"><div class="ico">💬</div><h3>Hinglish, bilkul</h3><p>English and Hinglish work out of the box, plus 13 languages through Chrome's translator.</p><span class="cmd">notebook1 kitna bacha hai</span></div>
+      <div class="card"><div class="ico">💰</div><h3>Dues &amp; payments</h3><p>Every customer and supplier balance, with the next step.</p><span class="cmd">Sharma Textiles ka kitna baki hai</span></div>
+      <div class="card"><div class="ico">🔐</div><h3>Your OK first</h3><p>Money and stock moves are filled in, then held until you say yes.</p><span class="cmd">Gupta Stores ne 600 diye upi se</span></div>
+      <div class="card"><div class="ico">👤</div><h3>Customers in one line</h3><p>Name and mobile number. Vasy fills the form and saves it.</p><span class="cmd">add customer Anand Stores 98xxxxxxxx</span></div>
+      <div class="card"><div class="ico">⇥</div><h3>Tab autocomplete</h3><p>Completes commands and names as you type, and learns from what you use.</p><span class="cmd">create purch⇥ → create purchase order for</span></div>
+      <div class="card"><div class="ico">🧭</div><h3>Any page, by name</h3><p>Settings, stock, accounts, reports: all 77 modules.</p><span class="cmd">open bank reconciliation</span></div>
+      <div class="card"><div class="ico">🖨️</div><h3>Print &amp; PDF</h3><p>Open any document's print or PDF view by its number.</p><span class="cmd">print INV/1379</span></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="split">
+      <div>
+        <h2>Built for the counter, not the classroom</h2>
+        <p class="sub">There's nothing to learn. Speak the way you already talk to your staff.</p>
+        <ul class="ticks">
+          <li><b>Learns your wording:</b> when a new phrasing works, it remembers it.</li>
+          <li><b>Chat bubble or console:</b> drag the bubble anywhere (Alt+V), or open a side-by-side console (Alt+Shift+V).</li>
+          <li><b>Voice:</b> tap the mic and say the command.</li>
+          <li><b>Also covers:</b> invoices, estimates, delivery challans, returns, stock transfers, production, settings and Tally export.</li>
+        </ul>
+      </div>
+      <div class="phone">
+        <video controls playsinline preload="metadata" poster="media/images/Poster-9x16-reveal.jpg">
+          <source src="media/video/Vasy-AI-Agent-Ad-9x16.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+  </section>
+
+  <div class="value">
+    <p class="zero"><span class="hl">₹0</span></p>
+    <h2>Free. No API key. No credits. No subscription.</h2>
+    <p class="sub" style="margin: 0 auto">The AI runs inside your browser, with no cloud service and no usage limits.</p>
+  </div>
+
+  <section id="privacy">
+    <h2>Private by design</h2>
+    <div class="grid">
+      <div class="card"><div class="ico">🖥️</div><h3>Runs on your computer</h3><p>Commands are understood inside your browser. On supported PCs it can also use Chrome's built-in on-device model, opened only when needed.</p></div>
+      <div class="card"><div class="ico">🔑</div><h3>No accounts, no keys</h3><p>It talks only to your own VasyERP server. Chat history and learned wordings stay in your browser.</p></div>
+      <div class="card"><div class="ico">🙅</div><h3>Never types passwords</h3><p>It only opens the Change Password page. You type the password yourself.</p></div>
+    </div>
+  </section>
+
+  <section id="install">
+    <h2>Install in a minute</h2>
+    <ol class="steps">
+      <li><b>Download</b> <a href="release/Vasy-AI-Agent-v17.3.0.zip" download><code>Vasy-AI-Agent-v17.3.0.zip</code></a> and unzip it.</li>
+      <li>In Chrome, open <code>chrome://extensions</code> and switch on <b>Developer mode</b> (top right).</li>
+      <li>Click <b>Load unpacked</b> and choose the unzipped folder.</li>
+      <li>Open VasyERP and click the <b>Vasy bubble</b> in the corner, or press <b>Alt+V</b>.</li>
+    </ol>
+    <p class="note" style="text-align:left">Want to check your download? Compare its SHA-256 with <a href="CHECKSUMS.sha256">CHECKSUMS.sha256</a>.</p>
+  </section>
+
+  <footer>
+    <div class="row">
+      <div>Developed by <b style="color:var(--text)">Moksheet Shah</b> · <a href="https://www.linkedin.com/in/moksheet-shah-14a30a21a/">LinkedIn</a></div>
+      <div>© 2026 Moksheet Shah. All rights reserved. · <a href="LICENSE">License</a></div>
+    </div>
+    <p style="margin:14px 0 0">VasyERP is a trademark of its owner. On-device AI and translation use Chrome's built-in models where your PC supports them.</p>
+  </footer>
+</div>
+</body>
+</html>

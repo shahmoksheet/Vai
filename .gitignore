@@ -1,0 +1,19 @@
+# OS / editor junk
+Thumbs.db
+desktop.ini
+.DS_Store
+*.swp
+*~
+.vscode/
+.idea/
+
+# never publish browser profiles, logs or secrets
+*.log
+*.env
+.env*
+*.pem
+*.key
+*_prof/
+chrome_profile/
+Learn/
+scratchpad/

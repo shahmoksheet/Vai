@@ -1,0 +1,891 @@
+/* © 2026 Moksheet Shah. All rights reserved. Shared for viewing only — no copying, modification or redistribution without written permission. See LICENSE. */
+/* bubble.css v12.1 — Vasy AI Agent — minimalist, solid-colour, light + dark */
+
+/* ── Design tokens ─────────────────────────────────────────────────────────── */
+#vasy-root {
+    /* Light (default) */
+    --v-accent:      #6B4CF6;   /* Intelligence Violet — the ONE bold colour   */
+    --v-accent-deep: #5438D6;
+    --v-accent-soft: #EFEBFE;
+    --v-spark:       #FFAE33;   /* Saffron — status/spark only                 */
+    --v-danger:      #E23B4E;   /* Heritage Crimson — errors only              */
+    --v-danger-soft: #FDF0F1;
+    --v-ok:          #16A34A;
+    --v-ok-soft:     #EFFBF4;
+
+    --v-panel:       #FFFFFF;
+    --v-surface:     #F7F5FB;   /* Mist — chat log ground                      */
+    --v-card:        #FFFFFF;
+    --v-input:       #FBFAFE;
+    --v-text:        #1B1730;
+    --v-muted:       #7D76A0;
+    --v-faint:       #B4ADD1;
+    --v-line:        #E9E5F4;
+    --v-shadow:      rgba(27, 23, 48, 0.14);
+}
+
+#vasy-root.vasy-dark {
+    --v-accent:      #8B70FF;
+    --v-accent-deep: #6B4CF6;
+    --v-accent-soft: #2C2450;
+    --v-danger:      #FF6B7C;
+    --v-danger-soft: #35202A;
+    --v-ok:          #3ECF8E;
+    --v-ok-soft:     #1C2F27;
+
+    --v-panel:       #1A1626;
+    --v-surface:     #14111F;   /* Vasy Ink                                    */
+    --v-card:        #241E3C;
+    --v-input:       #1E1932;
+    --v-text:        #F0EDF8;
+    --v-muted:       #9C94BC;
+    --v-faint:       #6A628E;
+    --v-line:        #2E2750;
+    --v-shadow:      rgba(0, 0, 0, 0.5);
+}
+
+/* The reset has to beat the ERP's own stylesheet, but NOT our own component
+   rules. As "#vasy-root *" it carried ID weight and silently overrode every
+   padding/margin/line-height below — messages, chips and buttons all rendered
+   with zero padding. :where() keeps the !important (beats the host page) while
+   dropping the specificity to zero (our class rules win again). */
+:where(#vasy-root) * {
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: normal !important;
+}
+#vasy-root * {
+    font-family: 'Plus Jakarta Sans', 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Inter', Arial, sans-serif !important;
+}
+
+#vasy-root {
+    position: fixed !important;
+    bottom: 90px !important;
+    right: 24px !important;
+    z-index: 2147483647 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-end !important;
+}
+
+/* ── FAB ───────────────────────────────────────────────────────────────────── */
+#vasy-fab {
+    width: 58px !important;
+    height: 58px !important;
+    border-radius: 18px !important;
+    background: #171226 !important;                 /* ink tile, matches app icon */
+    border: none !important;
+    cursor: pointer !important;
+    box-shadow: 0 6px 18px var(--v-shadow) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: relative !important;
+    transition: transform 0.22s cubic-bezier(.34,1.56,.64,1), box-shadow 0.2s !important;
+    flex-shrink: 0 !important;
+    margin-top: 10px !important;
+}
+
+#vasy-fab:hover { transform: scale(1.08) rotate(-3deg) !important; }
+#vasy-fab.vasy-fab-open { transform: scale(1.04) !important; }
+
+#vasy-fab-icon { line-height: 0 !important; }
+#vasy-fab-icon svg path { stroke: var(--v-accent); }
+#vasy-fab-icon svg { display: block !important; }
+
+#vasy-fab-dot {
+    position: absolute !important;
+    top: 5px !important;
+    right: 5px !important;
+    width: 11px !important;
+    height: 11px !important;
+    border-radius: 50% !important;
+    background: #3ECF8E !important;
+    border: 2px solid #171226 !important;
+    z-index: 2 !important;
+}
+
+#vasy-fab-dot.vasy-dot-busy {
+    background: var(--v-spark) !important;
+    animation: vasy-pulse 1s infinite !important;
+}
+
+@keyframes vasy-pulse {
+    0%,100% { opacity:1; transform:scale(1); }
+    50%      { opacity:0.55; transform:scale(1.25); }
+}
+
+/* ── Panel ─────────────────────────────────────────────────────────────────── */
+#vasy-panel {
+    width: 420px !important;
+    height: 585px !important;
+    background: var(--v-panel) !important;
+    border-radius: 20px !important;
+    border: 1px solid var(--v-line) !important;
+    box-shadow: 0 24px 64px var(--v-shadow) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+    animation: vasy-slide-up 0.26s cubic-bezier(.2,.85,.4,1) !important;
+}
+
+#vasy-panel.vasy-hidden { display: none !important; }
+
+@keyframes vasy-slide-up {
+    from { opacity:0; transform:translateY(18px) scale(.96); }
+    to   { opacity:1; transform:translateY(0) scale(1); }
+}
+
+/* ── Header — flat, minimalist ─────────────────────────────────────────────── */
+#vasy-header {
+    background: var(--v-panel) !important;
+    border-bottom: 1px solid var(--v-line) !important;
+    padding: 12px 15px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    flex-shrink: 0 !important;
+}
+
+#vasy-header-left {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    flex: 1 !important;
+    min-width: 0 !important;
+}
+
+#vasy-logo {
+    width: 36px !important;
+    height: 36px !important;
+    background: #171226 !important;
+    border-radius: 11px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+    line-height: 0 !important;
+}
+#vasy-logo svg path { stroke: var(--v-accent); }
+
+#vasy-title {
+    color: var(--v-text) !important;
+    font-weight: 800 !important;
+    font-size: 14.5px !important;
+    letter-spacing: -0.2px !important;
+    white-space: nowrap !important;
+}
+
+#vasy-subtitle {
+    color: var(--v-muted) !important;
+    font-size: 9.5px !important;
+    margin-top: 2px !important;
+    letter-spacing: 0.4px !important;
+    text-transform: uppercase !important;
+    font-weight: 600 !important;
+}
+
+#vasy-header-btns {
+    display: flex !important;
+    gap: 4px !important;
+    flex-shrink: 0 !important;
+}
+
+#vasy-header-btns button {
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    border-radius: 9px !important;
+    color: var(--v-muted) !important;
+    cursor: pointer !important;
+    padding: 5px 8px !important;
+    font-size: 13px !important;
+    transition: all 0.15s !important;
+    line-height: 1.3 !important;
+}
+
+#vasy-header-btns button:hover {
+    background: var(--v-accent-soft) !important;
+    color: var(--v-accent) !important;
+}
+
+#vasy-tts-btn.vasy-tts-on {
+    background: var(--v-accent-soft) !important;
+    color: var(--v-accent) !important;
+}
+
+/* ── Context bar ───────────────────────────────────────────────────────────── */
+#vasy-context-bar {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    padding: 5px 15px !important;
+    background: var(--v-surface) !important;
+    border-bottom: 1px solid var(--v-line) !important;
+    flex-shrink: 0 !important;
+}
+
+#vasy-context-icon { font-size: 11px !important; }
+
+#vasy-context-module {
+    font-size: 10.5px !important;
+    font-weight: 700 !important;
+    color: var(--v-accent) !important;
+    flex: 1 !important;
+}
+
+#vasy-context-hint {
+    font-size: 9.5px !important;
+    color: var(--v-faint) !important;
+}
+
+/* ── Settings ──────────────────────────────────────────────────────────────── */
+#vasy-settings {
+    padding: 13px 15px !important;
+    background: var(--v-panel) !important;
+    border-bottom: 1px solid var(--v-line) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    flex-shrink: 0 !important;
+}
+
+#vasy-settings.vasy-hidden { display: none !important; }
+
+/* ── Past chats (history) ──────────────────────────────────────────────────── */
+#vasy-history {
+    padding: 11px 15px !important;
+    background: var(--v-panel) !important;
+    border-bottom: 1px solid var(--v-line) !important;
+    flex-shrink: 0 !important;
+    max-height: 240px !important;
+    overflow-y: auto !important;
+}
+#vasy-history.vasy-hidden { display: none !important; }
+#vasy-history-head {
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    color: var(--v-muted) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.7px !important;
+    margin-bottom: 8px !important;
+}
+.vasy-hist-row {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    padding: 8px 10px !important;
+    border: 1.5px solid var(--v-line) !important;
+    border-radius: 10px !important;
+    margin-bottom: 6px !important;
+    background: var(--v-input) !important;
+    transition: border-color 0.15s !important;
+}
+.vasy-hist-row:hover { border-color: var(--v-accent) !important; }
+.vasy-hist-meta { flex: 1 !important; cursor: pointer !important; min-width: 0 !important; }
+.vasy-hist-title {
+    font-size: 12.5px !important;
+    font-weight: 600 !important;
+    color: var(--v-text) !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+.vasy-hist-sub {
+    font-size: 10.5px !important;
+    color: var(--v-muted) !important;
+    margin-top: 2px !important;
+}
+.vasy-hist-del {
+    border: none !important;
+    background: transparent !important;
+    cursor: pointer !important;
+    font-size: 13px !important;
+    opacity: 0.55 !important;
+    padding: 4px !important;
+    flex-shrink: 0 !important;
+}
+.vasy-hist-del:hover { opacity: 1 !important; }
+.vasy-hist-empty {
+    font-size: 12px !important;
+    color: var(--v-muted) !important;
+    padding: 6px 2px !important;
+    line-height: 1.5 !important;
+}
+
+
+
+
+
+
+/* ── Chips ─────────────────────────────────────────────────────────────────── */
+#vasy-chips {
+    padding: 8px 12px !important;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    gap: 5px !important;
+    overflow-x: auto !important;
+    background: var(--v-panel) !important;
+    border-bottom: 1px solid var(--v-line) !important;
+    flex-shrink: 0 !important;
+    scrollbar-width: none !important;
+}
+
+#vasy-chips::-webkit-scrollbar { display: none !important; }
+
+/* ── Type-ahead command suggestions (above the input row) ─────────────────── */
+#vasy-suggest {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2px !important;
+    padding: 6px 10px !important;
+    background: var(--v-panel) !important;
+    border-top: 1px solid var(--v-line) !important;
+    flex-shrink: 0 !important;
+    max-height: 148px !important;
+    overflow-y: auto !important;
+}
+#vasy-suggest.vasy-hidden { display: none !important; }
+#vasy-suggest .vasy-sug {
+    all: unset !important;
+    display: block !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    padding: 7px 10px !important;
+    border-radius: 8px !important;
+    font: 500 12.5px/1.35 var(--v-font, inherit) !important;
+    color: var(--v-text) !important;
+    cursor: pointer !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+#vasy-suggest .vasy-sug:hover,
+#vasy-suggest .vasy-sug:focus-visible {
+    background: var(--v-accent) !important;
+    color: #fff !important;
+}
+
+.vasy-chip {
+    font-size: 10.5px !important;
+    padding: 5px 12px !important;
+    border: 1px solid var(--v-line) !important;
+    border-radius: 20px !important;
+    background: var(--v-card) !important;
+    color: var(--v-accent) !important;
+    cursor: pointer !important;
+    font-weight: 600 !important;
+    white-space: nowrap !important;
+    transition: all 0.18s cubic-bezier(.2,.8,.4,1) !important;
+    flex-shrink: 0 !important;
+}
+
+.vasy-chip:hover {
+    background: var(--v-accent) !important;
+    color: white !important;
+    border-color: var(--v-accent) !important;
+    transform: translateY(-2px) !important;
+}
+
+/* ── Chat log ──────────────────────────────────────────────────────────────── */
+#vasy-log {
+    flex: 1 1 auto !important;
+    /* Without min-height:0 a flex item refuses to shrink below its content, so
+       opening the suggestion list pushed the input row clean off the panel
+       (measured: input bottom 588 vs panel bottom 548). The log must give up the
+       space instead. */
+    min-height: 0 !important;
+    padding: 14px !important;
+    overflow-y: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    scroll-behavior: smooth !important;
+    background: var(--v-surface) !important;
+}
+
+#vasy-log::-webkit-scrollbar { width: 4px !important; }
+#vasy-log::-webkit-scrollbar-track { background: transparent !important; }
+#vasy-log::-webkit-scrollbar-thumb { background: var(--v-line) !important; border-radius: 4px !important; }
+
+/* ── Messages ──────────────────────────────────────────────────────────────── */
+.vm {
+    max-width: 88% !important;
+    padding: 10px 14px !important;
+    border-radius: 16px !important;
+    font-size: 12.5px !important;
+    line-height: 1.58 !important;
+    word-wrap: break-word !important;
+    animation: vasy-fadein 0.2s ease-out !important;
+    position: relative !important;
+}
+
+@keyframes vasy-fadein {
+    from { opacity:0; transform:translateY(6px); }
+    to   { opacity:1; transform:translateY(0); }
+}
+
+.vm-bot {
+    background: var(--v-card) !important;
+    color: var(--v-text) !important;
+    align-self: flex-start !important;
+    border-bottom-left-radius: 5px !important;
+    border: 1px solid var(--v-line) !important;
+}
+
+.vm-user {
+    background: var(--v-accent) !important;
+    color: white !important;
+    align-self: flex-end !important;
+    border-bottom-right-radius: 5px !important;
+}
+
+.vm-sys {
+    background: transparent !important;
+    color: var(--v-faint) !important;
+    font-size: 10.5px !important;
+    font-style: italic !important;
+    text-align: center !important;
+    align-self: center !important;
+    padding: 3px 10px !important;
+    max-width: 100% !important;
+}
+
+.vm-success {
+    border-left: 3px solid var(--v-ok) !important;
+    background: var(--v-ok-soft) !important;
+    animation: vasy-pop 0.34s cubic-bezier(.34,1.56,.64,1) !important;
+}
+
+@keyframes vasy-pop {
+    0%   { opacity:0; transform:scale(.92) translateY(8px); }
+    70%  { transform:scale(1.02) translateY(-2px); }
+    100% { opacity:1; transform:scale(1) translateY(0); }
+}
+
+.vm-error {
+    border-left: 3px solid var(--v-danger) !important;
+    background: var(--v-danger-soft) !important;
+}
+
+.vm-bot:hover { box-shadow: 0 3px 12px var(--v-shadow) !important; }
+
+/* Copy button */
+.vm-copy-btn {
+    position: absolute !important;
+    top: 6px !important;
+    right: 8px !important;
+    font-size: 10px !important;
+    background: var(--v-accent-soft) !important;
+    border: none !important;
+    border-radius: 5px !important;
+    padding: 2px 5px !important;
+    cursor: pointer !important;
+    color: var(--v-muted) !important;
+    opacity: 0 !important;
+    transition: opacity 0.15s !important;
+    line-height: 1.5 !important;
+}
+
+.vm:hover .vm-copy-btn { opacity: 1 !important; }
+
+/* Timestamp */
+.vm-ts {
+    font-size: 9px !important;
+    color: var(--v-faint) !important;
+    margin-top: 4px !important;
+    display: block !important;
+}
+
+.vm-user .vm-ts { color: rgba(255,255,255,0.55) !important; }
+
+/* Reply badges — the language a reply was translated from */
+.vm-src {
+    display: inline-block !important;
+    font-size: 9px !important;
+    font-weight: 700 !important;
+    padding: 1px 6px !important;
+    border-radius: 8px !important;
+    margin-right: 5px !important;
+    vertical-align: middle !important;
+    animation: vasy-fadein 0.4s ease-out !important;
+}
+.vm-src-local  { background: var(--v-ok-soft) !important;     color: var(--v-ok) !important; }
+
+/* Quick-reply buttons */
+.vm-quick {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+    margin-top: 8px !important;
+}
+
+.vm-quick-btn {
+    font-size: 11px !important;
+    padding: 5px 13px !important;
+    border: 1px solid var(--v-line) !important;
+    border-radius: 18px !important;
+    background: var(--v-panel) !important;
+    color: var(--v-accent) !important;
+    cursor: pointer !important;
+    font-weight: 700 !important;
+    white-space: nowrap !important;
+    transition: all 0.16s cubic-bezier(.2,.8,.4,1) !important;
+    line-height: 1.4 !important;
+    animation: vasy-fadein 0.3s ease-out !important;
+}
+
+.vm-quick-btn:hover {
+    background: var(--v-accent) !important;
+    color: white !important;
+    border-color: var(--v-accent) !important;
+    transform: translateY(-2px) scale(1.04) !important;
+}
+
+/* ── Typing indicator ──────────────────────────────────────────────────────── */
+.vm-typing {
+    display: flex !important;
+    gap: 5px !important;
+    align-items: center !important;
+    padding: 13px 16px !important;
+}
+
+.vm-typing span {
+    width: 7px !important;
+    height: 7px !important;
+    border-radius: 50% !important;
+    background: var(--v-accent) !important;
+    opacity: 0.5 !important;
+    display: block !important;
+    animation: vasy-bounce 1.3s ease-in-out infinite !important;
+}
+
+.vm-typing span:nth-child(2) { animation-delay: 0.2s !important; }
+.vm-typing span:nth-child(3) { animation-delay: 0.4s !important; }
+
+.vm-typing-ai span { display: none !important; }
+.vm-typing-ai { font-size: 11px !important; color: var(--v-accent) !important; font-weight: 600 !important; }
+
+@keyframes vasy-bounce {
+    0%,80%,100% { transform:translateY(0); opacity:0.35; }
+    40%          { transform:translateY(-5px); opacity:1; }
+}
+
+/* ── Voice bar ─────────────────────────────────────────────────────────────── */
+#vasy-voice-bar {
+    padding: 7px 15px !important;
+    background: var(--v-surface) !important;
+    border-top: 1px solid var(--v-line) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    flex-shrink: 0 !important;
+    animation: vasy-fadein 0.2s ease !important;
+}
+
+#vasy-voice-bar.vasy-hidden { display: none !important; }
+
+#vasy-voice-waves {
+    display: flex !important;
+    gap: 3px !important;
+    align-items: center !important;
+    height: 18px !important;
+}
+
+#vasy-voice-waves span {
+    width: 3px !important;
+    background: var(--v-accent) !important;
+    border-radius: 2px !important;
+    animation: vasy-wave 0.9s ease-in-out infinite !important;
+}
+
+#vasy-voice-waves span:nth-child(1) { height: 5px !important;  animation-delay: 0.0s !important; }
+#vasy-voice-waves span:nth-child(2) { height: 12px !important; animation-delay: 0.1s !important; }
+#vasy-voice-waves span:nth-child(3) { height: 18px !important; animation-delay: 0.2s !important; }
+#vasy-voice-waves span:nth-child(4) { height: 10px !important; animation-delay: 0.3s !important; }
+#vasy-voice-waves span:nth-child(5) { height: 5px !important;  animation-delay: 0.4s !important; }
+
+@keyframes vasy-wave {
+    0%,100% { transform:scaleY(0.5); opacity:0.5; }
+    50%      { transform:scaleY(1);   opacity:1;   }
+}
+
+#vasy-voice-text {
+    font-size: 11.5px !important;
+    color: var(--v-accent) !important;
+    font-weight: 600 !important;
+    flex: 1 !important;
+}
+
+/* ── Input row ─────────────────────────────────────────────────────────────── */
+#vasy-input-row {
+    padding: 10px 12px !important;
+    background: var(--v-panel) !important;
+    border-top: 1px solid var(--v-line) !important;
+    display: flex !important;
+    gap: 7px !important;
+    align-items: center !important;
+    flex-shrink: 0 !important;
+}
+
+#vasy-input {
+    flex: 1 !important;
+    padding: 9px 14px !important;
+    border: 1.5px solid var(--v-line) !important;
+    border-radius: 24px !important;
+    font-size: 12.5px !important;
+    background: var(--v-input) !important;
+    outline: none !important;
+    transition: border-color 0.2s !important;
+    color: var(--v-text) !important;
+    min-width: 0 !important;
+}
+
+#vasy-input:focus { border-color: var(--v-accent) !important; }
+#vasy-input:disabled { opacity:0.45 !important; cursor:not-allowed !important; }
+#vasy-input::placeholder { color: var(--v-faint) !important; }
+
+#vasy-mic {
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 50% !important;
+    background: var(--v-panel) !important;
+    border: 1.5px solid var(--v-line) !important;
+    color: var(--v-muted) !important;
+    font-size: 14px !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.2s !important;
+    flex-shrink: 0 !important;
+}
+
+#vasy-mic:hover {
+    background: var(--v-accent-soft) !important;
+    border-color: var(--v-accent) !important;
+    color: var(--v-accent) !important;
+}
+
+#vasy-mic.vasy-mic-on {
+    background: var(--v-accent) !important;
+    border-color: var(--v-accent) !important;
+    color: white !important;
+    animation: vasy-mic-pulse 1s infinite !important;
+}
+
+@keyframes vasy-mic-pulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(107,76,246,0.45); }
+    50%      { box-shadow: 0 0 0 8px rgba(107,76,246,0);  }
+}
+
+#vasy-send {
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 50% !important;
+    background: var(--v-accent) !important;
+    border: none !important;
+    color: white !important;
+    font-size: 13px !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: background 0.2s, transform 0.15s !important;
+    flex-shrink: 0 !important;
+}
+
+#vasy-send:hover:not(:disabled) { background: var(--v-accent-deep) !important; transform: scale(1.08) !important; }
+#vasy-send:disabled { opacity:0.3 !important; cursor:not-allowed !important; }
+
+#vasy-stop {
+    padding: 5px 12px !important;
+    border-radius: 16px !important;
+    background: transparent !important;
+    border: 1.5px solid var(--v-spark) !important;
+    color: var(--v-spark) !important;
+    font-size: 11px !important;
+    cursor: pointer !important;
+    font-weight: 700 !important;
+    transition: all 0.15s !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+}
+
+#vasy-stop:hover { background: var(--v-spark) !important; color: #171226 !important; }
+#vasy-stop.vasy-hidden { display: none !important; }
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   v16 — free placement, compact & see-through modes, menus, voice pill
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Free placement: the root becomes a zero-size anchor; panel and launcher each
+   sit at their own coordinates (set as CSS variables from content_bubble.js). */
+#vasy-root.vasy-free {
+    left: 0 !important; top: 0 !important; right: auto !important; bottom: auto !important;
+    width: 0 !important; height: 0 !important; display: block !important; overflow: visible !important;
+}
+#vasy-root.vasy-free #vasy-fab {
+    position: fixed !important; left: var(--vf-x) !important; top: var(--vf-y) !important;
+    margin: 0 !important; touch-action: none !important;
+}
+#vasy-root.vasy-free #vasy-panel {
+    position: fixed !important; left: var(--vp-x) !important; top: var(--vp-y) !important;
+    width: var(--vp-w) !important; height: var(--vp-h) !important;
+    max-width: calc(100vw - 16px) !important; max-height: calc(100vh - 16px) !important;
+}
+#vasy-root.vasy-dragging, #vasy-root.vasy-dragging * { user-select: none !important; cursor: grabbing !important; }
+#vasy-root.vasy-dragging #vasy-panel, #vasy-root.vasy-dragging #vasy-fab { transition: none !important; animation: none !important; }
+#vasy-header { cursor: grab !important; touch-action: none !important; position: relative !important; user-select: none !important; }
+
+/* Header: compact, line icons */
+#vasy-root #vasy-header { padding: 10px 10px 10px 14px !important; gap: 8px !important; }
+#vasy-root #vasy-header-left { display: flex !important; align-items: center !important; gap: 10px !important; min-width: 0 !important; }
+#vasy-root #vasy-title { font-size: 14px !important; font-weight: 700 !important; letter-spacing: -0.01em !important; color: var(--v-text) !important; }
+#vasy-root #vasy-subtitle { font-size: 10.5px !important; color: var(--v-muted) !important; margin-top: 2px !important; text-transform: none !important; letter-spacing: 0 !important; }
+#vasy-root #vasy-header-btns { display: flex !important; align-items: center !important; gap: 2px !important; flex-shrink: 0 !important; }
+#vasy-root #vasy-header-btns button {
+    width: 30px !important; height: 30px !important; border-radius: 8px !important; padding: 0 !important;
+    display: inline-flex !important; align-items: center !important; justify-content: center !important;
+    background: transparent !important; border: none !important; color: var(--v-muted) !important; cursor: pointer !important;
+}
+#vasy-root #vasy-header-btns button:hover { background: var(--v-accent-soft) !important; color: var(--v-accent) !important; }
+#vasy-root #vasy-header-btns button:focus-visible,
+#vasy-root #vasy-input-row button:focus-visible { outline: 2px solid var(--v-accent) !important; outline-offset: 1px !important; }
+
+/* Menus (more + language) */
+#vasy-root #vasy-more-menu, #vasy-root #vasy-lang-menu {
+    position: absolute !important; z-index: 30 !important; background: var(--v-panel) !important;
+    border: 1px solid var(--v-line) !important; border-radius: 12px !important;
+    box-shadow: 0 14px 40px var(--v-shadow) !important; padding: 6px !important; min-width: 230px !important;
+}
+#vasy-root #vasy-more-menu { top: 46px !important; right: 10px !important; cursor: default !important; }
+#vasy-root #vasy-lang-menu { bottom: 62px !important; left: 10px !important; max-height: 60% !important; overflow-y: auto !important; }
+#vasy-root #vasy-more-menu.vasy-hidden, #vasy-root #vasy-lang-menu.vasy-hidden { display: none !important; }
+#vasy-root #vasy-more-menu button, #vasy-root .vasy-lang-opt {
+    display: flex !important; align-items: center !important; gap: 10px !important; width: 100% !important;
+    padding: 8px 10px !important; border-radius: 8px !important; border: none !important; background: transparent !important;
+    color: var(--v-text) !important; font-size: 12.5px !important; cursor: pointer !important; text-align: left !important;
+}
+#vasy-root #vasy-more-menu button svg { color: var(--v-muted) !important; flex-shrink: 0 !important; }
+#vasy-root #vasy-more-menu button:hover, #vasy-root .vasy-lang-opt:hover { background: var(--v-accent-soft) !important; }
+#vasy-root #vasy-tts-btn.vasy-tts-on svg { color: var(--v-accent) !important; }
+#vasy-root .vasy-lang-opt.vasy-on { color: var(--v-accent) !important; font-weight: 700 !important; background: var(--v-accent-soft) !important; }
+#vasy-root #vasy-lang-menu-head { font-size: 10.5px !important; font-weight: 700 !important; letter-spacing: .08em !important; text-transform: uppercase !important; color: var(--v-muted) !important; padding: 6px 10px 4px !important; }
+#vasy-root #vasy-handsfree-row { display: flex !important; align-items: flex-start !important; gap: 8px !important; padding: 9px 10px 4px !important; margin-top: 4px !important; border-top: 1px solid var(--v-line) !important; font-size: 12px !important; color: var(--v-text) !important; cursor: pointer !important; line-height: 1.4 !important; }
+#vasy-root #vasy-handsfree { margin-top: 2px !important; accent-color: var(--v-accent) !important; }
+#vasy-root #vasy-voice-engine { font-size: 10.5px !important; color: var(--v-muted) !important; padding: 4px 10px 6px !important; line-height: 1.45 !important; }
+
+/* Context bar + chips: one tidy row each */
+#vasy-root #vasy-context-bar { padding: 6px 14px !important; gap: 6px !important; font-size: 11px !important; }
+#vasy-root #vasy-context-hint { overflow: hidden !important; text-overflow: ellipsis !important; white-space: nowrap !important; }
+#vasy-root #vasy-chips { padding: 8px 12px !important; gap: 6px !important; mask-image: linear-gradient(90deg, #000 88%, transparent) !important; -webkit-mask-image: linear-gradient(90deg, #000 88%, transparent) !important; }
+#vasy-root .vasy-chip { font-size: 11.5px !important; padding: 5px 11px !important; }
+
+/* Messages: readable spacing */
+#vasy-root #vasy-log { padding: 14px 14px 10px !important; gap: 10px !important; }
+#vasy-root .vm { padding: 10px 13px !important; font-size: 13px !important; line-height: 1.5 !important; border-radius: 14px !important; }
+#vasy-root .vm-user { border-bottom-right-radius: 4px !important; }
+#vasy-root .vm-bot { border-bottom-left-radius: 4px !important; }
+#vasy-root .vm small { font-size: 11.5px !important; line-height: 1.45 !important; }
+#vasy-root .vm br + small, #vasy-root .vm b + br + small { display: inline-block !important; margin-top: 2px !important; }
+#vasy-root .vm-sys { padding: 2px 10px !important; font-size: 11px !important; font-style: normal !important; color: var(--v-muted) !important; }
+#vasy-root .vm-ts { margin-top: 5px !important; font-size: 9.5px !important; }
+#vasy-root .vm-copy-btn { top: 6px !important; right: 6px !important; padding: 2px 6px !important; }
+#vasy-root .vm-quick { display: flex !important; flex-wrap: wrap !important; gap: 6px !important; margin-top: 8px !important; }
+#vasy-root .vm-quick-btn { padding: 5px 11px !important; border-radius: 16px !important; font-size: 11.5px !important; }
+#vasy-root .vm-src { padding: 1px 6px !important; margin: 0 6px 4px 0 !important; border-radius: 6px !important; }
+#vasy-root .vm-typing { padding: 12px 14px !important; }
+#vasy-root .vasy-sug { padding: 6px 12px !important; }
+#vasy-root #vasy-suggest { padding: 6px 12px !important; gap: 6px !important; }
+
+/* Input row: mic · language pill · field · send */
+#vasy-root #vasy-input-row { padding: 10px 12px 12px !important; gap: 6px !important; }
+#vasy-root #vasy-input { padding: 10px 14px !important; font-size: 13px !important; }
+#vasy-root #vasy-mic, #vasy-root #vasy-send { width: 38px !important; height: 38px !important; }
+#vasy-root #vasy-lang-pill {
+    height: 30px !important; min-width: 34px !important; padding: 0 8px !important; border-radius: 15px !important;
+    border: 1px solid var(--v-line) !important; background: var(--v-input) !important; color: var(--v-muted) !important;
+    font-size: 11px !important; font-weight: 700 !important; cursor: pointer !important; flex-shrink: 0 !important;
+}
+#vasy-root #vasy-lang-pill:hover { color: var(--v-accent) !important; border-color: var(--v-accent) !important; }
+#vasy-root #vasy-stop { padding: 6px 12px !important; }
+#vasy-root #vasy-voice-bar { padding: 8px 14px !important; gap: 10px !important; }
+#vasy-root #vasy-settings { padding: 12px 14px !important; display: flex !important; flex-direction: column !important; gap: 8px !important; }
+#vasy-root #vasy-settings.vasy-hidden { display: none !important; }
+#vasy-root #vasy-history-head { padding: 10px 14px !important; }
+#vasy-root .vasy-hist-row { padding: 9px 14px !important; }
+
+/* Resize grip */
+#vasy-root #vasy-resize {
+    position: absolute !important; right: 2px !important; bottom: 2px !important; width: 16px !important; height: 16px !important;
+    color: var(--v-faint) !important; cursor: nwse-resize !important; touch-action: none !important; z-index: 5 !important;
+    display: flex !important; align-items: center !important; justify-content: center !important; opacity: .7 !important;
+}
+#vasy-root #vasy-resize:hover { color: var(--v-accent) !important; opacity: 1 !important; }
+#vasy-root:not(.vasy-free) #vasy-resize { display: none !important; }
+
+/* Compact: header + last reply + input */
+#vasy-root #vasy-panel.vasy-mini { height: auto !important; }
+#vasy-root #vasy-panel.vasy-mini #vasy-chips,
+#vasy-root #vasy-panel.vasy-mini #vasy-context-bar,
+#vasy-root #vasy-panel.vasy-mini #vasy-resize { display: none !important; }
+#vasy-root #vasy-panel.vasy-mini #vasy-log { flex: 0 0 auto !important; max-height: 150px !important; }
+#vasy-root #vasy-panel.vasy-mini #vasy-log > .vm:not(:last-child) { display: none !important; }
+
+/* See-through: the page shows through and takes the clicks; the header stays
+   solid so the chat can be brought back (or moved) at any time. */
+#vasy-root #vasy-panel.vasy-ghost { background: transparent !important; border-color: transparent !important; box-shadow: none !important; pointer-events: none !important; }
+#vasy-root #vasy-panel.vasy-ghost > *:not(#vasy-header) { opacity: 0 !important; transition: opacity .2s !important; }
+#vasy-root #vasy-panel.vasy-ghost #vasy-header { pointer-events: auto !important; border-radius: 14px !important; border: 1px solid var(--v-line) !important; box-shadow: 0 8px 24px var(--v-shadow) !important; }
+#vasy-root #vasy-panel.vasy-ghost #vasy-ghost-btn { color: var(--v-accent) !important; background: var(--v-accent-soft) !important; }
+
+@media (prefers-reduced-motion: reduce) {
+    #vasy-root *, #vasy-root *::before, #vasy-root *::after { animation: none !important; transition: none !important; }
+}
+
+/* Inline completion: grey ghost text after what was typed; Tab takes it */
+#vasy-root #vasy-input-wrap { position: relative !important; flex: 1 !important; min-width: 0 !important; display: flex !important; }
+#vasy-root #vasy-input-wrap #vasy-input { flex: 1 !important; width: 100% !important; }
+#vasy-root #vasy-ghost { position: absolute !important; inset: 0 !important; display: flex !important; align-items: center !important;
+    pointer-events: none !important; white-space: pre !important; overflow: hidden !important; box-sizing: border-box !important;
+    color: var(--v-faint) !important; }
+#vasy-root #vasy-ghost[hidden] { display: none !important; }
+#vasy-root #vasy-ghost .g-typed { visibility: hidden !important; flex: none !important; }
+#vasy-root #vasy-ghost .g-rest { color: var(--v-faint) !important; min-width: 0 !important; overflow: hidden !important; text-overflow: ellipsis !important; }
+#vasy-root #vasy-ghost .g-key { flex: none !important; margin-left: 6px !important; padding: 2px 5px !important; border-radius: 4px !important;
+    border: 1px solid var(--v-line) !important; background: var(--v-panel) !important; color: var(--v-muted) !important;
+    font: 600 9.5px/1 system-ui, -apple-system, "Segoe UI", sans-serif !important; letter-spacing: .02em !important; }
+
+/* Settings: on-device AI & learning */
+#vasy-root #vasy-ai-box { margin-top: 12px !important; padding: 10px 12px !important; border: 1px solid var(--v-line) !important; border-radius: 10px !important;
+    display: grid !important; gap: 6px !important; background: var(--v-input) !important; }
+#vasy-root #vasy-ai-box .vasy-ai-head { font-size: 10px !important; font-weight: 700 !important; text-transform: uppercase !important; letter-spacing: .7px !important; color: var(--v-muted) !important; }
+#vasy-root #vasy-ai-row { display: flex !important; align-items: flex-start !important; gap: 8px !important; font-size: 12px !important; line-height: 1.4 !important; color: var(--v-text) !important; cursor: pointer !important; }
+#vasy-root #vasy-ai-row input { margin-top: 2px !important; accent-color: var(--v-accent) !important; }
+#vasy-root #vasy-learn-row { display: flex !important; align-items: center !important; justify-content: space-between !important; gap: 8px !important; font-size: 11.5px !important; color: var(--v-muted) !important; }
+#vasy-root #vasy-learn-forget { font: 600 11px/1 inherit !important; padding: 5px 10px !important; border-radius: 999px !important; cursor: pointer !important;
+    border: 1px solid var(--v-line) !important; background: var(--v-panel) !important; color: var(--v-text) !important; }
+#vasy-root #vasy-learn-forget:disabled { opacity: .45 !important; cursor: default !important; }
+#vasy-root #vasy-learn-forget[data-armed="1"] { border-color: var(--v-danger) !important; color: var(--v-danger) !important; }
+#vasy-root #vasy-ai-box .vasy-ai-note { margin: 0 !important; font-size: 10.5px !important; line-height: 1.45 !important; color: var(--v-faint) !important; }
+
+/* Live progress line while a task runs (elapsed time, then a Stop button) */
+#vasy-root .vm-progress { display: flex !important; align-items: center !important; gap: 6px !important; flex-wrap: wrap !important;
+    color: var(--v-accent) !important; font-weight: 600 !important; }
+#vasy-root .vm-progress::before { content: "" !important; width: 7px !important; height: 7px !important; border-radius: 50% !important;
+    background: var(--v-accent) !important; flex: none !important; animation: vasyPulse 1.2s ease-in-out infinite !important; }
+#vasy-root .vm-progress .vp-time { color: var(--v-muted) !important; font-weight: 500 !important; font-variant-numeric: tabular-nums !important; }
+#vasy-root .vm-progress .vp-stop { margin-left: auto !important; font: 600 11px/1 inherit !important; padding: 4px 10px !important; border-radius: 999px !important;
+    border: 1px solid var(--v-danger) !important; color: var(--v-danger) !important; background: transparent !important; cursor: pointer !important; }
+#vasy-root .vm-progress .vp-stop:hover { background: var(--v-danger-soft) !important; }
+#vasy-root .vm-progress.vm-progress-done { color: var(--v-muted) !important; font-weight: 500 !important; }
+#vasy-root .vm-progress.vm-progress-done::before { animation: none !important; background: var(--v-ok) !important; }
+@keyframes vasyPulse { 0%, 100% { opacity: .35; transform: scale(.8); } 50% { opacity: 1; transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) { #vasy-root .vm-progress::before { animation: none !important; } }
+
+/* Never on paper — Ctrl+P on any ERP page (reports, ledgers) prints the page, not the chat */
+@media print {
+    #vasy-root { display: none !important; }
+}

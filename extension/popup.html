@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<!-- © 2026 Moksheet Shah. All rights reserved. Shared for viewing only — no copying, modification or redistribution without written permission. See LICENSE. -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>VasyERP AI Agent</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
+    body { width: 300px; background: #f0f2f5; color: #1a1a2e; }
+
+    .header {
+      background: linear-gradient(135deg, #E23B4E 0%, #6B4CF6 100%);
+      color: white; padding: 14px 16px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .logo { font-size: 24px; }
+    .header h2 { font-size: 15px; font-weight: 700; }
+    .header p  { font-size: 10px; opacity: 0.75; margin-top: 2px; }
+
+    .body { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+
+    .status-card {
+      background: white; border-radius: 10px; padding: 14px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .status-dot { width: 10px; height: 10px; border-radius: 50%; background: #40c057; flex-shrink: 0; }
+    .status-dot.inactive { background: #adb5bd; }
+    .status-text { font-size: 12.5px; color: #444; }
+    .status-text b { color: #222; }
+
+    .ai-card {
+      background: white; border-radius: 10px; padding: 12px 14px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08); display: grid; gap: 8px;
+    }
+    .ai-card h3 { margin: 0; font-size: 11px; font-weight: 700; letter-spacing: .6px; text-transform: uppercase; color: #6B4CF6; }
+    .ai-row { display: flex; align-items: flex-start; gap: 8px; font-size: 12px; color: #333; line-height: 1.45; }
+    .ai-row input { margin-top: 2px; accent-color: #6B4CF6; }
+    .ai-btn { width: 100%; padding: 9px; border-radius: 8px; border: none; background: #1a1a2e; color: #fff; font-size: 12.5px; font-weight: 700; cursor: pointer; }
+    .ai-btn[disabled] { opacity: .55; cursor: default; }
+    .learn-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 11.5px; color: #666; }
+    .learn-row button { padding: 5px 10px; border-radius: 999px; border: 1px solid #ddd; background: #fff; font-size: 11px; font-weight: 600; cursor: pointer; }
+    .learn-row button[data-armed="1"] { border-color: #c92a2a; color: #c92a2a; }
+    .learn-row button[disabled] { opacity: .45; cursor: default; }
+    #learnDetails summary { font-size: 11.5px; color: #6B4CF6; font-weight: 600; cursor: pointer; }
+    #learnList { list-style: none; margin: 6px 0 0; padding: 0; display: grid; gap: 4px; max-height: 160px; overflow-y: auto; }
+    #learnList li { display: flex; align-items: flex-start; gap: 6px; font-size: 11px; color: #444; line-height: 1.35; }
+    #learnList li span { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+    #learnList li small { display: block; color: #888; margin-top: 1px; }
+    #learnList li button { flex: none; border: none; background: none; color: #999; font-size: 13px; line-height: 1; cursor: pointer; padding: 0 2px; }
+    #learnList li button:hover { color: #c92a2a; }
+
+    .info-card {
+      background: #fff8e1; border-radius: 10px; padding: 12px;
+      font-size: 11.5px; color: #856404; line-height: 1.6;
+    }
+    .info-card b { color: #533f03; }
+
+    .credit-card {
+      background: linear-gradient(135deg, #1a1a2e 0%, #2d1b1b 100%);
+      border-radius: 10px; padding: 12px 14px;
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none; cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .credit-card:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+    }
+    .credit-text .linkedin {
+      font-size: 10px; color: #6cb2ff; margin-top: 3px; font-weight: 600;
+    }
+    .credit-avatar {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: linear-gradient(135deg, #E23B4E, #6B4CF6);
+      color: #fff; font-weight: 800; font-size: 15px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .credit-text { line-height: 1.4; }
+    .credit-text .made { font-size: 10px; color: #9aa0b4; text-transform: uppercase; letter-spacing: 0.5px; }
+    .credit-text .name { font-size: 13.5px; color: #fff; font-weight: 700; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <span class="logo"><svg viewBox="0 0 100 100" width="30" height="30"><path d="M24 30 L50 76" stroke="#fff" stroke-width="15" stroke-linecap="round" fill="none"/><path d="M50 76 L74 26" stroke="#fff" stroke-width="15" stroke-linecap="round" fill="none"/><circle cx="79" cy="15" r="8" fill="#FFAE33"/></svg></span>
+    <div>
+      <h2>Vasy AI Agent</h2>
+      <p><span id="ver"></span> · Business, running itself</p>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="status-card">
+      <div class="status-dot"></div>
+      <div class="status-text"><b>Ready</b> — everything runs inside your browser. No API key, no cloud service: open VasyERP and use the chat bubble.</div>
+    </div>
+
+    <div class="ai-card">
+      <h3>On-device AI &amp; learning</h3>
+      <label class="ai-row"><input type="checkbox" id="aiOn"> <span id="aiStatus">Checking Chrome's built-in model…</span></label>
+      <button class="ai-btn" id="aiDownload" hidden>Turn on on-device AI</button>
+      <div class="learn-row"><span id="learnCount">…</span><button id="learnForget" type="button">Forget</button></div>
+      <details id="learnDetails" hidden><summary>See what Vasy learned</summary><ul id="learnList"></ul></details>
+    </div>
+
+    <button id="openConsoleBtn" style="display:block;width:100%;padding:11px;border-radius:10px;border:none;background:#6B4CF6;color:#fff;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:10px">Open chat console (Alt+Shift+V)</button>
+
+    <div class="info-card">
+      <b>How to use:</b> Open VasyERP — the chat bubble appears in the corner; drag it anywhere. Or open the <b>chat console</b> to type in its own window while the ERP works alongside. Type or speak in 13 languages.
+    </div>
+
+    <a href="landing.html" target="_blank" style="display:block;text-align:center;padding:10px;border-radius:10px;border:1.5px solid #6B4CF6;color:#6B4CF6;font-size:12px;font-weight:700;text-decoration:none">📖 About, Guide &amp; FAQ</a>
+
+    <a class="credit-card" href="https://www.linkedin.com/in/moksheet-shah-14a30a21a/" target="_blank" rel="noopener" title="Connect on LinkedIn">
+      <div class="credit-avatar">SM</div>
+      <div class="credit-text">
+        <div class="made">Developed by</div>
+        <div class="name">Moksheet Shah</div>
+        <div class="linkedin">in&nbsp; Connect on LinkedIn ↗</div>
+      </div>
+    </a>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
