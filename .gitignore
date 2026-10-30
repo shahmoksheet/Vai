@@ -17,3 +17,9 @@ desktop.ini
 chrome_profile/
 Learn/
 scratchpad/
+
+# over GitHub's 100 MB file limit: attached to the GitHub Release instead
+release-assets/
+
+# your private upload guide (has local paths)
+GITHUB-UPLOAD-GUIDE.md

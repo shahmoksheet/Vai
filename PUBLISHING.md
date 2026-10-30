@@ -18,11 +18,11 @@ Follow these steps once to put everything on GitHub, set it so only you can chan
    - Name: `vasy-ai-agent` (or any name you like)
    - Choose **Publish to GitHub public repository**.
 4. If it asks which files to include, **keep all of them ticked**.
-5. If GitHub warns that `media/video/Vasy-AI-Agent-Ad-16x9.mp4` is larger than 50 MB, that's only a warning: GitHub accepts files up to 100 MB. Let it continue.
+5. If GitHub warns that a file is larger than 50 MB, that's only a warning: GitHub accepts files up to 100 MB. Let it continue.
 
 When it finishes, VS Code shows **Open on GitHub**. Click it to see your repo.
 
-> **First commit message:** if VS Code asks, use `Vasy AI Agent v17.3.0 — first public release`.
+> **First commit message:** if VS Code asks, use `Vasy AI Agent v17.3.1 — first public release`.
 
 ## 3. Make sure only you can change it
 
@@ -51,10 +51,11 @@ Other people can still **view** and **fork** a public repo; GitHub always allows
 ## 5. Create the release (the download people install)
 
 1. On the repo page, go to **Releases → Draft a new release**.
-2. **Choose a tag:** type `v17.3.0` and press *Create new tag*.
-3. **Title:** `Vasy AI Agent v17.3.0`
-4. **Description:** paste the *v17.3.0* section from `CHANGELOG.md`.
-5. **Attach files:** drag in `release/Vasy-AI-Agent-v17.3.0.zip`, `media/video/Vasy-AI-Agent-Ad-16x9.mp4`, `media/video/Vasy-AI-Agent-Ad-9x16.mp4` and `CHECKSUMS.sha256`.
+2. **Choose a tag:** type `v17.3.1` and press *Create new tag*.
+3. **Title:** `Vasy AI Agent v17.3.1`
+4. **Description:** paste the *v17.3.1* section from `CHANGELOG.md`.
+5. **Attach files:** drag in `release/Vasy-AI-Agent-v17.3.1.zip`, everything in `release-assets/` (the 3½-minute walkthrough and the pitch deck), `media/video/Vasy-AI-Agent-Ad-16x9.mp4`, `media/video/Vasy-AI-Agent-Ad-9x16.mp4` and `CHECKSUMS.sha256`.
+   > `release-assets/` is not committed: GitHub refuses files over 100 MB in a repository, but a release accepts files up to 2 GB. The README and website link to the latest release for them.
 6. Click **Publish release**.
 
 ## 6. Share it
@@ -85,7 +86,7 @@ Captions, titles and hashtags for YouTube, Instagram, LinkedIn and WhatsApp are 
 ## Checking a download (for you or your users)
 
 ```powershell
-Get-FileHash .\Vasy-AI-Agent-v17.3.0.zip -Algorithm SHA256
+Get-FileHash .\Vasy-AI-Agent-v17.3.1.zip -Algorithm SHA256
 ```
 
 The hash must match the line for that file in `CHECKSUMS.sha256`. If it doesn't, the file isn't your official build.

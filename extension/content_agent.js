@@ -8160,7 +8160,8 @@ async function answerDashV2(data, question) {
         if (!range) range = _clean((_globalDateBtn(panels) || {}).innerText || '');
         const arrow = d => d === 'up' ? '▲' : d === 'down' ? '▼' : '';
         parts.push(tileHits.map(t => {
-            const v = t.exact && /[\d]/.test(t.exact) ? t.exact.replace(/(\.\d{2})00$/, '$1') : t.short;
+            // the tile's exact value can carry 4–5 decimals ("₹2,74,672.00000"): keep two
+            const v = t.exact && /[\d]/.test(t.exact) ? t.exact.replace(/(\.\d{2})\d*$/, '$1') : t.short;
             return `<b>${t.label}:</b> ${v}` + (t.change ? ` <small>(${arrow(t.dir)} ${t.change} vs the previous period)</small>` : '');
         }).join('<br>') + (range ? `<br><small>📅 ${range}</small>` : ''));
     }

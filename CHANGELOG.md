@@ -1,5 +1,9 @@
 # Changelog
 
+## v17.3.1 — 29 Oct 2026
+- Dashboard amounts now show two decimals: ₹2,74,672.00, not ₹2,74,672.00000.
+- New: a 3½-minute walkthrough film and a 20-slide pitch deck, attached to the v17.3.1 GitHub Release (too large for the repository).
+
 ## v17.3.0 — 28 Oct 2026
 **Faster and steadier on everyday office PCs**
 - **No more random "stuck" replies on 8 GB laptops.** Chrome's on-device model needs about 3.5 GB. Vasy now keeps it loaded only on computers with room to spare. Elsewhere it opens the model when a new wording needs it, and frees it soon after.

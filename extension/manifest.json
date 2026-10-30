@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Vasy AI Agent",
-  "version": "17.3.0",
+  "version": "17.3.1",
   "description": "Vasy AI copilot for VasyERP — run purchase, sales, stock, money and reports by chat or voice in 13 languages, from a movable chat bubble or a side-by-side console. No API key needed.",
   "author": "Moksheet Shah",
   "icons": {

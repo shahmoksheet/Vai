@@ -8,7 +8,7 @@ There's no API key, no credits to buy and no subscription. It all runs in your b
 
 [![Watch the 76-second film](media/images/Poster-16x9-reveal.jpg)](media/video/Vasy-AI-Agent-Ad-16x9.mp4)
 
-▶ **[Watch the film (16:9, 76 s)](media/video/Vasy-AI-Agent-Ad-16x9.mp4)** · **[Vertical cut for phones (9:16, 36 s)](media/video/Vasy-AI-Agent-Ad-9x16.mp4)** · **[Download v17.3.0](release/Vasy-AI-Agent-v17.3.0.zip)**
+▶ **[Watch the film (16:9, 76 s)](media/video/Vasy-AI-Agent-Ad-16x9.mp4)** · **[Full walkthrough (3½ min)](../../releases/latest)** · **[Vertical cut for phones (9:16, 36 s)](media/video/Vasy-AI-Agent-Ad-9x16.mp4)** · **[Pitch deck (.pptx)](../../releases/latest)** · **[Download v17.3.1](release/Vasy-AI-Agent-v17.3.1.zip)**
 
 Every shot in the films is the real agent working on a VasyERP test account. Sped-up waits are marked ⏩ on screen.
 
@@ -43,12 +43,12 @@ It also covers:
 ## Private by design
 
 - **No cloud AI.** Commands are understood inside your browser. On supported PCs it can also use Chrome's built-in on-device model. On computers with less memory, it opens that model only when needed and frees it afterwards.
-- **No accounts or keys.** The extension talks only to your own VasyERP server. Chat history and learned wordings stay in your browser's local storage.
+- **No accounts or keys.** The extension talks only to your own VasyERP server. Chat history and learned wordings stay in your browser's local storage. Voice input uses Chrome's speech service.
 - **It never types passwords.** It only opens the Change Password page; you type the password yourself.
 
 ## Install
 
-1. Download [`release/Vasy-AI-Agent-v17.3.0.zip`](release/Vasy-AI-Agent-v17.3.0.zip) and unzip it. Check it against [`CHECKSUMS.sha256`](CHECKSUMS.sha256) if you like.
+1. Download [`release/Vasy-AI-Agent-v17.3.1.zip`](release/Vasy-AI-Agent-v17.3.1.zip) and unzip it. Check it against [`CHECKSUMS.sha256`](CHECKSUMS.sha256) if you like.
 2. In Chrome, open `chrome://extensions` and switch on **Developer mode**.
 3. Click **Load unpacked** and choose the unzipped folder.
 4. Open VasyERP and click the Vasy bubble in the corner, or press **Alt+V**.
@@ -80,6 +80,9 @@ It also covers:
 │   └── images/          posters and thumbnails
 └── marketing/
     └── AD-COPY.md       titles, captions and hashtags for each platform
+
+The 3½-minute walkthrough (117 MB) and the 20-slide pitch deck (161 MB) are larger than GitHub allows in a repository,
+so they are attached to the [latest release](../../releases/latest).
 ```
 
 ## License

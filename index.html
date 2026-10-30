@@ -85,7 +85,7 @@
 <div class="wrap">
   <header class="top">
     <a class="brand" href="#"><img src="extension/icons/icon128.png" alt="">Vasy AI Agent</a>
-    <nav class="nav"><a href="#features">Features</a><a href="#install">Install</a><a href="#privacy">Privacy</a><a href="release/Vasy-AI-Agent-v17.3.0.zip" download>Download</a></nav>
+    <nav class="nav"><a href="#features">Features</a><a href="#install">Install</a><a href="#privacy">Privacy</a><a href="release/Vasy-AI-Agent-v17.3.1.zip" download>Download</a></nav>
   </header>
 
   <div class="hero">
@@ -93,7 +93,7 @@
     <h1>Type it. Vasy does the <span class="hl">clicking.</span></h1>
     <p class="lead">Tell it what you need in plain English or Hinglish. Vasy fills the real VasyERP screens for you, answers questions from your books, and waits for your yes before it moves any money.</p>
     <div class="cta">
-      <a class="btn primary" href="release/Vasy-AI-Agent-v17.3.0.zip" download>⬇ Download v17.3.0 — free</a>
+      <a class="btn primary" href="release/Vasy-AI-Agent-v17.3.1.zip" download>⬇ Download v17.3.1 — free</a>
       <a class="btn ghost" href="#install">How to install</a>
     </div>
     <ul class="pills"><li>No API key</li><li>No credits</li><li>No subscription</li><li>Runs in your browser</li><li>All 77 modules</li></ul>
@@ -102,7 +102,7 @@
         <source src="media/video/Vasy-AI-Agent-Ad-16x9.mp4" type="video/mp4">
       </video>
     </div>
-    <p class="note">Real footage of the agent on a VasyERP test account · ⏩ marks sped-up moments</p>
+    <p class="note">Real footage of the agent on a VasyERP test account · ⏩ marks sped-up moments · <a class="rel" href="#">Full 3½-minute walkthrough &amp; pitch deck (on the Releases page)</a></p>
   </div>
 
   <section id="features">
@@ -151,7 +151,7 @@
     <h2>Private by design</h2>
     <div class="grid">
       <div class="card"><div class="ico">🖥️</div><h3>Runs on your computer</h3><p>Commands are understood inside your browser. On supported PCs it can also use Chrome's built-in on-device model, opened only when needed.</p></div>
-      <div class="card"><div class="ico">🔑</div><h3>No accounts, no keys</h3><p>It talks only to your own VasyERP server. Chat history and learned wordings stay in your browser.</p></div>
+      <div class="card"><div class="ico">🔑</div><h3>No accounts, no keys</h3><p>It talks only to your own VasyERP server. Chat history and learned wordings stay in your browser. Voice input uses Chrome's speech service.</p></div>
       <div class="card"><div class="ico">🙅</div><h3>Never types passwords</h3><p>It only opens the Change Password page. You type the password yourself.</p></div>
     </div>
   </section>
@@ -159,7 +159,7 @@
   <section id="install">
     <h2>Install in a minute</h2>
     <ol class="steps">
-      <li><b>Download</b> <a href="release/Vasy-AI-Agent-v17.3.0.zip" download><code>Vasy-AI-Agent-v17.3.0.zip</code></a> and unzip it.</li>
+      <li><b>Download</b> <a href="release/Vasy-AI-Agent-v17.3.1.zip" download><code>Vasy-AI-Agent-v17.3.1.zip</code></a> and unzip it.</li>
       <li>In Chrome, open <code>chrome://extensions</code> and switch on <b>Developer mode</b> (top right).</li>
       <li>Click <b>Load unpacked</b> and choose the unzipped folder.</li>
       <li>Open VasyERP and click the <b>Vasy bubble</b> in the corner, or press <b>Alt+V</b>.</li>
@@ -175,5 +175,11 @@
     <p style="margin:14px 0 0">VasyERP is a trademark of its owner. On-device AI and translation use Chrome's built-in models where your PC supports them.</p>
   </footer>
 </div>
+<script>
+  // GitHub Pages lives at <user>.github.io/<repo>/ — point "Releases" at github.com/<user>/<repo>/releases/latest
+  (() => { const u = location.hostname.split('.')[0], r = location.pathname.split('/').filter(Boolean)[0];
+    const href = location.hostname.endsWith('github.io') && r ? `https://github.com/${u}/${r}/releases/latest` : 'release-assets/';
+    document.querySelectorAll('a.rel').forEach(a => a.href = href); })();
+</script>
 </body>
 </html>
